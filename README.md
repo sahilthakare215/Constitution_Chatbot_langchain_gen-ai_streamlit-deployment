@@ -1,4 +1,5 @@
 NOTE:this deployment is for streamlit,you can find another deployment using mern in the same account with repo named "constitution chatbot langchain geni ai fastapi deployment".
+NOTE:WAIT FOR 1 MINUTE FOR UI TO RENDER.
 
 
 # Constitution Chatbot – Streamlit Version
