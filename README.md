@@ -1,3 +1,6 @@
+NOTE:this deployment is for streamlit,you can find another deployment using mern in the same account with repo named "constitution chatbot langchain geni ai fastapi deployment".
+
+
 # Constitution Chatbot – Streamlit Version
 
 This project is a Constitution Chatbot that utilizes Retrieval-Augmented Generation (RAG) with a Streamlit interface.
