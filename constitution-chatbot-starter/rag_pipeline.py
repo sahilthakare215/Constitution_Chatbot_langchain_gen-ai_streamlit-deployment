@@ -49,11 +49,30 @@ class RAGBot:
 
         # Load embeddings and vector store if not already loaded
         if self.embeddings is None or self.vs is None:
+            CACHE_DIR = "vector_store"
+
+            # Sanitize PDF path to create a valid filename
+            sanitized_pdf_path = re.sub(r'[^a-zA-Z0-9]', '_', os.path.basename(pdf_path))
+            INDEX_PATH = os.path.join(CACHE_DIR, f"{sanitized_pdf_path}.faiss")
+
+            print(f"CACHE_DIR: {os.path.abspath(CACHE_DIR)}")
+            print(f"INDEX_PATH: {os.path.abspath(INDEX_PATH)}")
+            os.makedirs(CACHE_DIR, exist_ok=True)
+            print("Directory should be created.")
+
             with st.spinner("Loading embeddings and vector store..."):
                 try:
                     self.embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-                    self.vs = FAISS.from_documents(docs, self.embeddings)
-                    st.success("Embeddings and vector store initialized successfully.")
+                    if os.path.exists(INDEX_PATH):
+                        print(f"Loading cached FAISS index from {INDEX_PATH}")
+                        self.vs = FAISS.load_local(INDEX_PATH, self.embeddings, allow_dangerous_deserialization=True)
+                        st.success("Embeddings and vector store loaded from cache.")
+                    else:
+                        print("No cache found. Building new FAISS index...")
+                        self.vs = FAISS.from_documents(docs, self.embeddings)
+                        self.vs.save_local(INDEX_PATH)
+                        print(f"FAISS index saved to {INDEX_PATH}")
+                        st.success("Embeddings and vector store initialized and cached.")
                 except Exception as e:
                     st.error(f"Error initializing embeddings or vector store: {e}")
                     raise

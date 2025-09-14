@@ -2,8 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
+from dotenv import load_dotenv
 
 from rag_pipeline import RAGBot
+
+load_dotenv()
 
 app = FastAPI(title="Constitution Chatbot API", version="1.0.0")
 
